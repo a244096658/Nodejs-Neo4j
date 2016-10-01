@@ -20,7 +20,54 @@ var driver = neo4j.driver("bolt://localhost", neo4j.auth.basic("neo4j", "250daow
 var session = driver.session();
 
 
+app.all('*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
+    res.header("X-Powered-By",' 3.2.1')
+    res.header("Content-Type", "application/json;charset=utf-8");
+    next();
+});
 
+
+
+
+
+app.post("/",function(req,res){  //Because in HTML, the url we are posting is http:localhost:3000/  There is no prefix address , so here we just use "/" .
+  var title = req.body.title;    // fetch the Json data from html ajax
+  //var year  = req.body.year;
+
+  console.log(title);
+
+  session
+      .run(" CREATE (n:Movie { title:{titleParam}  }) RETURN n.title",{titleParam:title} )
+      .then(function(result){
+        console.log(n.title);
+        res.redirect("/");
+        session.close();
+
+      })
+      .catch(function(err){
+        console.log(err);
+
+      })
+
+
+
+  res.redirect("/");
+
+});
+
+
+
+
+app.listen(3000);
+
+console.log("server started on port 3000");
+
+module.exports = app;
+
+/*
 
 app.get("/",function(req,res){
 
@@ -50,40 +97,4 @@ app.get("/",function(req,res){
 
   
 });
-
-app.post("/movie/add",function(req,res){
-  var title = req.body.title;
-  var year  = req.body.year;
-
-  session
-      .run(" CREATE (n:Movie {title:{titleParam}, year:{yearParam} }) RETURN n.title",{titleParam:title, yearParam:year} )
-      .then(function(result){
-        console.log(n.title);
-        res.redirect("/");
-        session.close();
-
-      })
-      .catch(function(err){
-        console.log(err);
-
-      })
-
-
-
-
-
-
-  res.redirect("/");
-
-});
-
-
-
-
-
-app.listen(3000);
-
-console.log("server started on port 3000");
-
-module.exports = app;
-
+*/
