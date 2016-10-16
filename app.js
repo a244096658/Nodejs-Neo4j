@@ -40,7 +40,7 @@ app.post("/",function(req,res){  //Because in HTML, the url we are posting is ht
   console.log(title);
 
   session
-      .run(" CREATE (n:Movie { title:{titleParam}  }) RETURN n.title",{titleParam:title} )
+      .run(" MERGE (n:Movie { title:{titleParam}  }) RETURN n.title",{titleParam:title} )
       .then(function(result){
         console.log(n.title);
         res.redirect("/");
